@@ -33,7 +33,7 @@ router.get("/", authenticate, async (req, res) => {
 });
 
 // 🚀 Get Product by ID
-router.get("/:id", authenticate, async (req, res) => {
+router.get("/id/:id", authenticate, async (req, res) => {
     try {
         const product = await Product.findByPk(req.params.id);
 
@@ -46,6 +46,23 @@ router.get("/:id", authenticate, async (req, res) => {
         res.status(500).json({ message: "Server error", error });
     }
 });
+
+//find product by barcode
+router.get("/:barcode", authenticate, async (req, res) => {
+    try {
+        const product = await Product.findOne({ where: { barcode: req.params.barcode } });
+
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        res.json(product);
+    } catch (error) {
+        console.error("❌ Error fetching product by barcode:", error);
+        res.status(500).json({ message: "Server error", error });
+    }
+});
+
 
 // 🚀 Update Product (Admin Only)
 router.put("/update/:id", authenticate, isAdmin, async (req, res) => {
@@ -64,6 +81,7 @@ router.put("/update/:id", authenticate, isAdmin, async (req, res) => {
         res.status(500).json({ message: "Server error", error });
     }
 });
+
 
 // 🚀 Delete Product (Admin Only)
 router.delete("/delete/:id", authenticate, isAdmin, async (req, res) => {
