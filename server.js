@@ -10,10 +10,20 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use("/api/users", require("./routes/userRoutes"));
-app.use("/api/products", require("./routes/productRoutes"));
+// Import Routes
+const userRoutes = require("./routes/userRoutes");
+const productRoutes = require("./routes/productRoutes");
+const customerRoutes = require("./routes/customerRoutes");
+const orderRoutes = require("./routes/orderRoutes"); 
+
+// Register Routes
+app.use("/api/users", userRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/customers", customerRoutes);
+app.use("/api/orders", orderRoutes); 
 
 // Sync Database
 sequelize.sync().then(() => console.log("✅ Database Synced"));
 
+// Start Server
 app.listen(5000, () => console.log("🚀 Server running on port 5000"));
