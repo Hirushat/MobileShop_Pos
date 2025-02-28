@@ -1,3 +1,10 @@
+const express = require("express");
+const { authenticate } = require("../middleware/auth");
+const { Order, OrderItem, Product, Customer } = require("../models/index"); // ✅ Correct Import
+
+const router = express.Router(); // ✅ Define router
+
+// 🚀 Create Order
 router.post("/create", authenticate, async (req, res) => {
     try {
         const { customerId, items, paymentMethod } = req.body;
@@ -6,7 +13,7 @@ router.post("/create", authenticate, async (req, res) => {
             return res.status(400).json({ message: "No products in the order" });
         }
 
-        // ✅ Check if customerId is provided (Optional)
+        // ✅ Check if customerId exists (optional)
         let customer = null;
         if (customerId) {
             customer = await Customer.findByPk(customerId);
@@ -53,3 +60,17 @@ router.post("/create", authenticate, async (req, res) => {
         res.status(500).json({ message: "Server error", error });
     }
 });
+
+// 🚀 Get All Orders
+router.get("/", authenticate, async (req, res) => {
+    try {
+        const orders = await Order.findAll({
+            include: [{ model: Customer, attributes: ["name", "phone"] }]
+        });
+        res.json(orders);
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
+});
+
+module.exports = router; // ✅ Export router
