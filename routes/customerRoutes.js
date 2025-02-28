@@ -23,5 +23,16 @@ router.post("/create", authenticate, async (req, res) => {
     }
 });
 
+// 🚀 Get All Customers
+router.get("/", authenticate, async (req, res) => {
+    try {
+        const customers = await Customer.findAll();
+        res.json(customers);
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
+});
+
+
 
 module.exports = router;
