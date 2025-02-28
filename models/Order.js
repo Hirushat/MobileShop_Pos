@@ -9,7 +9,8 @@ const Order = sequelize.define("Order", {
     status: { type: DataTypes.ENUM("pending", "completed", "cancelled"), defaultValue: "pending" }
 });
 
-// Relationships
-Order.belongsTo(Customer, { foreignKey: "customerId" });
+// ✅ Relationship: Some orders might not have a customer
+Order.belongsTo(Customer, { foreignKey: "customerId", allowNull: true });
+
 
 module.exports = Order;
