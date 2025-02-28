@@ -10,16 +10,11 @@ router.post("/create", authenticate, async (req, res) => {
         const { name, email, phone, address } = req.body;
 
         // ✅ Check if phone number already exists
-        const existingCustomerPhone = await Customer.findOne({ where: { phone } });
+        const existingCustomer = await Customer.findOne({ where: { phone } });
+
         if (existingCustomer) {
             return res.status(400).json({ message: "Phone number already exists" });
         }
-
-         // ✅ Check if email already exists
-         const existingCustomerEmail = await Customer.findOne({ where: { email } });
-         if (existingCustomer) {
-             return res.status(400).json({ message: "Email already exists" });
-         }
 
         const customer = await Customer.create({ name, email, phone, address });
         res.status(201).json({ message: "Customer added successfully", customer });
