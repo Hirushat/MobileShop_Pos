@@ -17,6 +17,7 @@
     "jsonwebtoken": "^9.0.2",
     "moment-timezone": "^0.5.47",
     "mysql2": "^3.12.0",
+    "node-thermal-printer": "^4.4.4",
     "sequelize": "^6.37.5"
   }
 }

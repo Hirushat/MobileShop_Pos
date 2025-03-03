@@ -1,5 +1,5 @@
 const express = require("express");
-const { authenticate } = require("../middleware/auth");
+const { authenticate, isAdmin } = require("../middleware/auth");
 const Customer = require("../models/Customer");
 
 const router = express.Router();
@@ -88,7 +88,7 @@ router.put("/update/:id", authenticate, async (req, res) => {
 });
 
 // 🚀 Delete Customer
-router.delete("/delete/:id", authenticate, async (req, res) => {
+router.delete("/delete/:id", authenticate, isAdmin, async (req, res) => {
     try {
         const customer = await Customer.findByPk(req.params.id);
 
