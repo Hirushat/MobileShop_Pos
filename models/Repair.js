@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/db");
+const moment = require("moment-timezone"); // ✅ Install if not already installed
 
 const Repair = sequelize.define("Repair", {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -10,11 +11,14 @@ const Repair = sequelize.define("Repair", {
         type: DataTypes.ENUM("Pending", "In Progress", "Completed", "Delivered"),
         defaultValue: "Pending"
     },
-    repair_date: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+    repair_date: { 
+        type: DataTypes.DATE, 
+        defaultValue: () => moment().tz("Asia/Colombo").format("YYYY-MM-DD HH:mm:ss") // ✅ Converts to Sri Lankan time
+    },
     estimated_completion_date: { type: DataTypes.DATE },
     repair_cost: { type: DataTypes.DECIMAL(10, 2) },
     technician_name: { type: DataTypes.STRING },
     notes: { type: DataTypes.TEXT }
-});
+}, { timestamps: false }); // ✅ Disable timestamps
 
 module.exports = Repair;
